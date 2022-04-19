@@ -9,11 +9,14 @@ import hashlib
 
 from django.conf import settings
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect, reverse
 
 # Create your views here.
+from markdown import markdown
+
 from myapp import models, forms
+from myapp.models import ArticlePost
 
 
 def login(request):
@@ -32,9 +35,9 @@ def login(request):
             except:
                 message = "username or passwd not right....\nplease rewrite...."
                 return render(request, 'login.html', locals())
-            if not user.has_confirmed:
-                message = '该用户还未经过邮件确认！'
-                return render(request, 'login.html', locals())
+            # if not user.has_confirmed:
+            #     message = '该用户还未经过邮件确认！'
+            #     return render(request, 'login.html', locals())
             if user.password == hash_code(password):
                 request.session['is_login'] = True
                 request.session['user_id'] = user.id
@@ -53,7 +56,9 @@ def index(request):
     # 主页视图
     # if reverse('/index/'):
     #     return render(request, 'index.html')
-    return render(request, 'index.html')
+    articles = ArticlePost.objects.all()
+    context = {'articles': articles}
+    return render(request, 'index.html', context)
 
 
 def register(request):
@@ -92,7 +97,7 @@ def register(request):
                 code = make_confirm_string(new_user)
                 send_email(email, code)
                 message = '请前往邮箱进行确认！'
-                return redirect('/confirm.html', locals())
+                return render(request, 'confirm.html', locals())
         else:
             return render(request, 'register.html', locals())
     register_form = forms.RegisterForm()
@@ -110,8 +115,16 @@ def logout(request):
     return redirect('/login/')
 
 
-def test(request):
-    return HttpResponse('test')
+def article_detail(request, id):
+    article = get_object_or_404(ArticlePost, id=id)
+    # 引入markdown
+    article.body = markdown(article.body,
+                            extensions=[
+                                'markdown.extensions.extra',
+                                'markdown.extensions.codehilite',
+                            ])
+    context = {'article': article}
+    return render(request, 'detail.html', context)
 
 
 def hash_code(s, salt='LogAndReg'):  # hash
@@ -124,12 +137,11 @@ def hash_code(s, salt='LogAndReg'):  # hash
 def make_confirm_string(user):
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     code = hash_code(user.name, now)
-    models.ConfirmString.objects.create(code=code, user=user,)
+    models.ConfirmString.objects.create(code=code, user=user, )
     return code
 
 
 def send_email(email, code):
-
     from django.core.mail import EmailMultiAlternatives
 
     subject = '来自soda的零信任的登录注册系统的注册确认邮件'

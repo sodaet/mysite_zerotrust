@@ -26,4 +26,5 @@ urlpatterns = [
     path("logout/", views.logout, name="logout"),
     path("captcha/", include('captcha.urls')),
     path("confirm/", views.user_confirm, name="confirm"),
+    path('article-detail/<int:id>/', views.article_detail, name='article_detail'),
 ]
