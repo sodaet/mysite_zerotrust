@@ -126,5 +126,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.163.com'
 EMAIL_PORT = 25
 EMAIL_HOST_USER = 'soodadwx@163.com'  # 自己的邮箱账号
-EMAIL_HOST_PASSWORD = 'LKFMJTKTDKPSVRGE'  # 开启smtp之后人家给你的密码
+EMAIL_HOST_PASSWORD = 'LKFMJTKTDKPSVRGE'  # 开启smtp之后的密码
 CONFIRM_DAYS = 1

@@ -6,6 +6,7 @@
 """
 from django import forms
 from captcha.fields import CaptchaField
+from django.core.validators import RegexValidator
 
 
 class UserForm(forms.Form):
@@ -26,5 +27,7 @@ class RegisterForm(forms.Form):
     password2 = forms.CharField(label="确认密码", max_length=256,
                                 widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     email = forms.EmailField(label="邮箱地址", widget=forms.EmailInput(attrs={'class': 'form-control'}))
+    phone = forms.CharField(label="手机号码", max_length=16,
+                            widget=forms.TextInput(attrs={'class': 'form-control'}))
     sex = forms.ChoiceField(label='性别', choices=gender)
     captcha = CaptchaField(label='验证码')

@@ -4,8 +4,8 @@
 @Author  : soda
 @File    : models.py
 """
+from django.core.validators import RegexValidator
 from django.db import models
-
 
 # Create your models here.
 from django.utils import timezone
@@ -22,10 +22,10 @@ class User(models.Model):
     name = models.CharField(max_length=128, unique=True)
     password = models.CharField(max_length=256)
     email = models.EmailField(unique=True)
-    # phone = models.CharField(unique=True)
+    phone = models.CharField(max_length=16, unique=True, default="")
     sex = models.CharField(max_length=32, choices=gender, default="男")
     c_time = models.DateTimeField(auto_now_add=True)
-    # has_confirmed = models.CharField(max_length=1, default="N")
+    has_confirmed = models.BooleanField(default="False")
 
     def __str__(self):
         return self.name
@@ -51,19 +51,10 @@ class ConfirmString(models.Model):
 
 
 class ArticlePost(models.Model):
-    # 文章作者。参数 on_delete 用于指定数据删除的方式
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    # 文章标题。models.CharField 为字符串字段，用于保存较短的字符串，比如标题
     title = models.CharField(max_length=100)
-
-    # 文章正文。保存大量文本使用 TextField
     body = models.TextField()
-
-    # 文章创建时间。参数 default=timezone.now 指定其在创建数据时将默认写入当前的时间
     created = models.DateTimeField(default=timezone.now)
-
-    # 文章更新时间。参数 auto_now=True 指定每次数据更新时自动写入当前时间
     updated = models.DateTimeField(auto_now=True)
 
     # 内部类 class Meta 用于给 model 定义元数据
