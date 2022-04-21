@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}个人中心{% endblock %}
+
+{% block content %}
+{% if request.session.is_login %}
+        <h3>你好,{{ request.session.user_name }}！欢迎回来！</h3>
+        <p><a href="{% url "logout" %}">登出</a></p>
+    {% else %}
+        <h3>你尚未登录，快去登录吧！！</h3>
+        <p><a href="{% url "login" %}"></a></p>
+    {% endif %}
+{% endblock %}
