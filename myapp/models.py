@@ -24,6 +24,7 @@ class User(models.Model):
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=16, unique=True, default="")
     sex = models.CharField(max_length=32, choices=gender, default="男")
+    serial_number = models.CharField(max_length=128, unique=True, default="")
     c_time = models.DateTimeField(auto_now_add=True)
     has_confirmed = models.BooleanField(default=False)
 

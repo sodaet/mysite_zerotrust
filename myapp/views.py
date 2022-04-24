@@ -195,6 +195,7 @@ def user_confirm(request):
 
 
 def user_profile(request):
-    login_form = forms.UserForm(request.GET)
-    context = {'userinfo': login_form}
+    userinfo = models.User.objects.get(id=request.session.get("user_id"))
+    context = {'userinfo': userinfo}
+    print("123", context)
     return render(request, 'showme.html', context)

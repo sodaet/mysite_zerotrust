@@ -29,5 +29,14 @@ class RegisterForm(forms.Form):
     email = forms.EmailField(label="邮箱地址", widget=forms.EmailInput(attrs={'class': 'form-control'}))
     phone = forms.CharField(label="手机号码", max_length=16,
                             widget=forms.TextInput(attrs={'class': 'form-control'}))
+    serial_number = forms.CharField(label="设备编号", max_length=128, widget=forms.TextInput(attrs={'class': 'form-control'}))
     sex = forms.ChoiceField(label='性别', choices=gender)
     captcha = CaptchaField(label='验证码')
+
+
+# class UserInfo(forms.Form):
+#     username = forms.CharField(label="用户名")
+#     email = forms.CharField(label="邮箱地址")
+#     phone = forms.CharField(label="电话号码")
+#     sex = forms.CharField(label="性别")
+#     confirmed = forms.CharField(label="邮件确认")
