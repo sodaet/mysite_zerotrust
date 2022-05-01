@@ -78,6 +78,7 @@ def register(request):
             email = register_form.cleaned_data.get('email')
             phone = register_form.cleaned_data.get('phone')
             sex = register_form.cleaned_data.get('sex')
+            serial_num = register_form.cleaned_data.get('serial_number')
 
             # 使用正则验证手机号
             flag = re.search(r"1[3|4|5|7|8][0-9]{9}", phone)
@@ -103,6 +104,7 @@ def register(request):
                 new_user.email = email
                 new_user.sex = sex
                 new_user.phone = phone
+                new_user.serial_number = serial_num
                 new_user.save()
                 code = make_confirm_string(new_user)
                 send_email(email, code)
@@ -195,7 +197,10 @@ def user_confirm(request):
 
 
 def user_profile(request):
-    userinfo = models.User.objects.get(id=request.session.get("user_id"))
-    context = {'userinfo': userinfo}
-    print("123", context)
+    print(request.session.get("user_id"))
+    context = {}
+    if request.session.get("user_id"):
+        userinfo = models.User.objects.get(id=request.session.get("user_id"))
+        context = {'userinfo': userinfo}
+    # print("123", context)
     return render(request, 'showme.html', context)
